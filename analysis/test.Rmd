@@ -1,0 +1,42 @@
+---
+title: "test"
+author: "Anali Migueles "
+date: "2020-09-15"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+Open the pheno file
+
+```{r}
+library(ggplot2)
+library(cowplot) 
+library(ggrepel)
+
+pheno <- read.csv("/Users/graspare3/Desktop/plotingchallenge1/pheno.csv",quote = "",check.names = FALSE,
+                  stringsAsFactors = FALSE)
+pheno <- transform(pheno,
+                   id            = as.character(id),
+                   round         = factor(round,paste0("SW",1:25)),
+                   FCbox         = factor(FCbox),
+                   PPIbox        = factor(PPIbox),
+                   methcage      = factor(methcage),
+                   methcycle     = factor(methcycle),
+                   discard       = factor(discard),
+                   mixup         = factor(mixup),
+                   earpunch      = factor(earpunch),
+                   abnormalbone  = factor(abnormalbone),
+                   experimenters = factor(experimenters))
+pheno <- transform(pheno,fastglucose = as.double(fastglucose))
+pheno <- subset(pheno,discard == "no" & mixup == "no")
+```
+
+Now we try to do a hist of the TA column
+```{r}
+p1<-ggplot(pheno, aes_string(x="TA"))+ geom_histogram()
+print(p1)
+```
+
